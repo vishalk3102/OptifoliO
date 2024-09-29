@@ -9,15 +9,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
 
-
 @Data
-public class UserDTO {
-    @Id
-    @GeneratedValue(generator = "custom-id")
-    @GenericGenerator(name = "custom-id", type = CustomIdGenerator.class)
-    @Column(name = "user_id", unique = true, nullable = false)
-    private String userId;
-
+public class UserCreateDTO {
     @Column(name="full_name", nullable = false)
     private String name;
 

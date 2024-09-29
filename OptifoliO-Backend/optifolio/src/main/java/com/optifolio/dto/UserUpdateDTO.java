@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 
 @Data
-public class UserDTO {
+public class UserUpdateDTO {
     @Id
     @GeneratedValue(generator = "custom-id")
     @GenericGenerator(name = "custom-id", type = CustomIdGenerator.class)
