@@ -7,6 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorTag {
     USER_NOT_FOUND("user_not_found"),
+    CAPITAL_RECORD_NOT_FOUND("capital_record_not_found"),
     BAD_CREDENTIALS("bad_credentials"),
     USER_ALREADY_EXISTS("user_already_exist");
 

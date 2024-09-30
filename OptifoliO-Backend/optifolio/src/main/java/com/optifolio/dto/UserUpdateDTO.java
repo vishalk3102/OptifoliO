@@ -12,9 +12,6 @@ import java.time.LocalDateTime;
 
 @Data
 public class UserUpdateDTO {
-    @Id
-    @GeneratedValue(generator = "custom-id")
-    @GenericGenerator(name = "custom-id", type = CustomIdGenerator.class)
     @Column(name = "user_id", unique = true, nullable = false)
     private String userId;
 
