@@ -10,7 +10,6 @@ import java.util.List;
 
 public interface CapitalTrackService {
 
-
     CapitalTrackDTO getCapitalRecordById(String capitalTrackId) throws CapitalRecordNotFoundException;
 
     List<CapitalTrackDTO> getAllCapitalRecords();

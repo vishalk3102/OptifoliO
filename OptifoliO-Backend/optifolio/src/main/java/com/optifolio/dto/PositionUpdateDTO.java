@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class PositionDTO {
+public class PositionUpdateDTO {
     @Column(name = "option_id", unique = true, nullable = false)
     private String optionId;
 
@@ -34,29 +34,15 @@ public class PositionDTO {
     @Column(name = "average_sell_price", precision = 10, scale = 2)
     private BigDecimal averageSellPrice;
 
-    @Column(name = "total_buy_value", precision = 10, scale = 2, nullable = false)
-    private BigDecimal totalBuyValue;
-
-    @Column(name = "cuurent_value", precision = 10, scale = 2)
-    private BigDecimal cuurentValue;
-
-    @Column(name = "total_sell_value", precision = 10, scale = 2)
-    private BigDecimal totalSellValue;
-
     @Column(name = "buy_date", nullable = false)
     private LocalDateTime buyDate;
 
     @Column(name = "sell_date")
     private LocalDateTime sellDate;
 
-    @Column(name = "profit_loss", precision = 12, scale = 2)
-    private BigDecimal profitLoss;
 
     @Column(name = "tax_charges", precision = 12, scale = 2)
     private BigDecimal taxCharges;
-
-    @Column(name = "net_pnl", precision = 12, scale = 2)
-    private BigDecimal netProfitLoss;
 
     @Column(name = "comments", columnDefinition = "TEXT")
     private String comments;
@@ -64,9 +50,4 @@ public class PositionDTO {
     @Column(name = "status")
     private Boolean status=true;
 
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
 }

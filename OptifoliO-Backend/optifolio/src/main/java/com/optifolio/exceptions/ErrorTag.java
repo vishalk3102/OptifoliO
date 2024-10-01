@@ -8,8 +8,12 @@ import lombok.Getter;
 public enum ErrorTag {
     USER_NOT_FOUND("user_not_found"),
     CAPITAL_RECORD_NOT_FOUND("capital_record_not_found"),
+    PORTFOLIO_RECORD_NOT_FOUND("portfolio_record_not_found"),
+    POSITION_RECORD_NOT_FOUND("position_record_not_found"),
     BAD_CREDENTIALS("bad_credentials"),
-    USER_ALREADY_EXISTS("user_already_exist");
+    USER_ALREADY_EXISTS("user_already_exist"),
+    PORTFOLIO_ALREADY_EXISTS("portfolio_already_exist"),
+    POSITION_ALREADY_EXISTS("position_already_exist");
 
 
     private final String tag;
