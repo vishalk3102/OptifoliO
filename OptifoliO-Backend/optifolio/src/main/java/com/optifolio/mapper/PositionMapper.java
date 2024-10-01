@@ -24,10 +24,10 @@ public interface PositionMapper {
     @Mapping(target = "netProfitLoss", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    PortfolioDTO toPortfolioDTO(Position position);
+    PositionDTO toPositionDTO(Position position);
 
     //Mapping from  positionDto  to position entity
-    Position toPortfolioEntity(PositionDTO positionDTO);
+    Position toPositionEntity(PositionDTO positionDTO);
 
     //Mapping from positionCreateDTO to position entity
     @Mapping(target = "optionId", ignore = true)
@@ -41,7 +41,7 @@ public interface PositionMapper {
     @Mapping(target = "netProfitLoss", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    PositionDTO toPortfolioEntity(PositionCreateDTO positionCreateDTO);
+    Position toPositionEntity(PositionCreateDTO positionCreateDTO);
 
     //Update existing position  entity  from positionUpdateDTO
     @Mapping(target = "totalBuyValue", ignore = true)
@@ -51,39 +51,39 @@ public interface PositionMapper {
     @Mapping(target = "netProfitLoss", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    void updatePortfolioEntityFromDTO(PositionUpdateDTO positionUpdateDTO, @MappingTarget Position position);
+    void updatePositionEntityFromDTO(PositionUpdateDTO positionUpdateDTO, @MappingTarget Position position);
 
     //Mapping from List of position entities to list of positionDTO
-    List<PositionDTO> toPortfolioDTOS(List<Position> records);
+    List<PositionDTO> toPositionDTOS(List<Position> records);
 
 
 
     @AfterMapping
-    default void calculateDerivedFields(@MappingTarget Portfolio portfolio) {
+    default void calculateDerivedFields(@MappingTarget Position position) {
         // Calculate totalBuyValue
-        if (portfolio.getQuantity() != 0 && portfolio.getAverageBuyPrice() != null) {
-            portfolio.setTotalBuyValue(portfolio.getAverageBuyPrice().multiply(BigDecimal.valueOf(portfolio.getQuantity())));
+        if (position.getQuantity() != 0 && position.getAverageBuyPrice() != null) {
+            position.setTotalBuyValue(position.getAverageBuyPrice().multiply(BigDecimal.valueOf(position.getQuantity())));
         }
 
         // Calculate totalSellValue
-        if (portfolio.getQuantity() != 0 && portfolio.getAverageSellPrice() != null) {
-            portfolio.setTotalSellValue(portfolio.getAverageSellPrice().multiply(BigDecimal.valueOf(portfolio.getQuantity())));
+        if (position.getQuantity() != 0 && position.getAverageSellPrice() != null) {
+            position.setTotalSellValue(position.getAverageSellPrice().multiply(BigDecimal.valueOf(position.getQuantity())));
         }
 
         // Calculate profitLoss
-        if (portfolio.getTotalSellValue() != null && portfolio.getTotalBuyValue() != null) {
-            portfolio.setProfitLoss(portfolio.getTotalSellValue().subtract(portfolio.getTotalBuyValue()));
+        if (position.getTotalSellValue() != null && position.getTotalBuyValue() != null) {
+            position.setProfitLoss(position.getTotalSellValue().subtract(position.getTotalBuyValue()));
         }
 
         // Calculate netProfitLoss
-        if (portfolio.getProfitLoss() != null && portfolio.getTaxCharges() != null) {
-            portfolio.setNetProfitLoss(portfolio.getProfitLoss().subtract(portfolio.getTaxCharges()));
+        if (position.getProfitLoss() != null && position.getTaxCharges() != null) {
+            position.setNetProfitLoss(position.getProfitLoss().subtract(position.getTaxCharges()));
         }
 
         // Set createdAt and updatedAt
-        if (portfolio.getCreatedAt() == null) {
-            portfolio.setCreatedAt(LocalDateTime.now());
+        if (position.getCreatedAt() == null) {
+            position.setCreatedAt(LocalDateTime.now());
         }
-        portfolio.setUpdatedAt(LocalDateTime.now());
+        position.setUpdatedAt(LocalDateTime.now());
     }
 }
