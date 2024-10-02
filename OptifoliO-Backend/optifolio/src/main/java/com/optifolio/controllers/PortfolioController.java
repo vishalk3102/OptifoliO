@@ -3,9 +3,9 @@ package com.optifolio.controllers;
 
 import com.optifolio.dto.*;
 import com.optifolio.exceptions.CapitalRecordNotFoundException;
+import com.optifolio.exceptions.PortfolioRecordAlreadyExistException;
 import com.optifolio.exceptions.PortfolioRecordNotFoundException;
 import com.optifolio.exceptions.UserNotFoundException;
-import com.optifolio.services.CapitalTrackService;
 import com.optifolio.services.PortfolioService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,32 +33,32 @@ public class PortfolioController {
         List<PortfolioDTO> records=portfolioService.getAllPortfolioRecords();
         return ResponseEntity.status(HttpStatus.OK).body(records);
     }
-    @GetMapping("/get-portfolio-record/{holdingId}")
-    public ResponseEntity<PortfolioDTO> getPortfolioRecordById(@PathVariable String holdingId) throws UserNotFoundException, CapitalRecordNotFoundException, PortfolioRecordNotFoundException {
-        PortfolioDTO record=portfolioService.getPortfolioRecordById(holdingId);
+    @GetMapping("/get-portfolio-record/{tradingSymbol}")
+    public ResponseEntity<PortfolioDTO> getPortfolioRecordById(@PathVariable String tradingSymbol) throws PortfolioRecordNotFoundException {
+        PortfolioDTO record=portfolioService.getPortfolioRecordById(tradingSymbol);
         return ResponseEntity.status(HttpStatus.OK).body(record);
     }
 
 
     //    ADD NEW CAPITAL RECORD
     @PostMapping("/add-portfolio-record")
-    public ResponseEntity<PortfolioDTO> addPortfolioRecord(@RequestBody PortfolioCreateDTO portfolioCreateDTO)  {
+    public ResponseEntity<PortfolioDTO> addPortfolioRecord(@RequestBody PortfolioCreateDTO portfolioCreateDTO) throws PortfolioRecordAlreadyExistException {
         PortfolioDTO savedPortfolioRecord=portfolioService.addPortfolioRecord(portfolioCreateDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedPortfolioRecord);
     }
 
 
     //    UPDATE EXISTING  CAPITAL RECORD
-    @PutMapping("/update-portfolio-record/{holdingId}")
-    public ResponseEntity<PortfolioDTO> updatePortfolioRecord(@RequestBody PortfolioUpdateCTO portfolioUpdateCTO) throws CapitalRecordNotFoundException {
-        PortfolioDTO savedPortfolioCapitalRecord=portfolioService.updatePortfolioRecord(portfolioUpdateCTO);
+    @PutMapping("/update-portfolio-record/{tradingSymbol}")
+    public ResponseEntity<PortfolioDTO> updatePortfolioRecord(@RequestBody PortfolioUpdateDTO portfolioUpdateDTO) throws PortfolioRecordNotFoundException {
+        PortfolioDTO savedPortfolioCapitalRecord=portfolioService.updatePortfolioRecord(portfolioUpdateDTO);
         return ResponseEntity.status(HttpStatus.OK).body(savedPortfolioCapitalRecord);
     }
 
     //    DELETE EXISTING  CAPITAL RECORD
-    @DeleteMapping("/delete-portfolio-record/{holdingId}")
-    public ResponseEntity<PortfolioDTO> deletePortfolioRecord(@PathVariable String capitalTrackId) throws CapitalRecordNotFoundException {
-        PortfolioDTO deletePortfoliorecord=portfolioService.deletePortfolioRecord(capitalTrackId);
-        return ResponseEntity.status(HttpStatus.OK).body(deletePortfoliorecord);
+    @DeleteMapping("/delete-portfolio-record/{tradingSymbol}")
+    public ResponseEntity<PortfolioDTO> deletePortfolioRecord(@PathVariable String tradingSymbol) throws PortfolioRecordNotFoundException {
+        PortfolioDTO deletePortfolioRecord=portfolioService.deletePortfolioRecord(tradingSymbol);
+        return ResponseEntity.status(HttpStatus.OK).body(deletePortfolioRecord);
     }
 }

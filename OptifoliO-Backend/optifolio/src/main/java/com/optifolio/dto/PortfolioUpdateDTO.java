@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class PortfolioUpdateCTO {
+public class PortfolioUpdateDTO {
 
     @Column(name = "holding_id", unique = true, nullable = false)
     private String holdingId;

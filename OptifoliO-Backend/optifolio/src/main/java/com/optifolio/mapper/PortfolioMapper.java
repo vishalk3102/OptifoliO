@@ -2,7 +2,6 @@ package com.optifolio.mapper;
 
 
 import com.optifolio.dto.*;
-import com.optifolio.models.CapitalTrack;
 import com.optifolio.models.Portfolio;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
@@ -17,13 +16,13 @@ import java.util.List;
 public interface PortfolioMapper {
 
     //Mapping from  portfolio entity to portfolioDto
-    @Mapping(target = "totalBuyValue", ignore = true)
-    @Mapping(target = "cuurentValue", ignore = true)
-    @Mapping(target = "totalSellValue", ignore = true)
-    @Mapping(target = "profitLoss", ignore = true)
-    @Mapping(target = "netProfitLoss", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "totalBuyValue", expression = "java(portfolio.getTotalBuyValue())")
+    @Mapping(target = "currentValue", expression = "java(portfolio.getCurrentValue())")
+    @Mapping(target = "totalSellValue", expression = "java(portfolio.getTotalSellValue())")
+    @Mapping(target = "profitLoss", expression = "java(portfolio.getProfitLoss())")
+    @Mapping(target = "netProfitLoss", expression = "java(portfolio.getNetProfitLoss())")
+    @Mapping(target = "createdAt", expression = "java(portfolio.getCreatedAt())")
+    @Mapping(target = "updatedAt", expression = "java(portfolio.getUpdatedAt())")
     PortfolioDTO toPortfolioDTO(Portfolio portfolio);
 
     //Mapping from  portfolioDto  to portfolio entity
@@ -33,7 +32,7 @@ public interface PortfolioMapper {
     @Mapping(target = "holdingId", ignore = true)
     @Mapping(target = "averageSellPrice", ignore = true)
     @Mapping(target = "totalBuyValue", ignore = true)
-    @Mapping(target = "cuurentValue", ignore = true)
+    @Mapping(target = "currentValue", ignore = true)
     @Mapping(target = "totalSellValue", ignore = true)
     @Mapping(target = "sellDate", ignore = true)
     @Mapping(target = "profitLoss", ignore = true)
@@ -45,18 +44,16 @@ public interface PortfolioMapper {
 
     //Update existing portfolio  entity  from portfolioUpdateDTO
     @Mapping(target = "totalBuyValue", ignore = true)
-    @Mapping(target = "cuurentValue", ignore = true)
+    @Mapping(target = "currentValue", ignore = true)
     @Mapping(target = "totalSellValue", ignore = true)
     @Mapping(target = "profitLoss", ignore = true)
     @Mapping(target = "netProfitLoss", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    void updatePortfolioEntityFromDTO(PortfolioUpdateCTO portfolioUpdateCTO, @MappingTarget Portfolio portfolio);
+    void updatePortfolioEntityFromDTO(PortfolioUpdateDTO portfolioUpdateDTO, @MappingTarget Portfolio portfolio);
 
     //Mapping from List of portfolio entities to list of portfolioDTO
     List<PortfolioDTO> toPortfolioDTOS(List<Portfolio> records);
-
-
 
     @AfterMapping
     default void calculateDerivedFields(@MappingTarget Portfolio portfolio) {

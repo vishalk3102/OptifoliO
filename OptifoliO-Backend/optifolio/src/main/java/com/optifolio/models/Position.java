@@ -46,8 +46,8 @@ public class Position {
     @Column(name = "total_buy_value", precision = 10, scale = 2, nullable = false)
     private BigDecimal totalBuyValue;
 
-    @Column(name = "cuurent_value", precision = 10, scale = 2)
-    private BigDecimal cuurentValue;
+    @Column(name = "current_value", precision = 10, scale = 2)
+    private BigDecimal currentValue;
 
     @Column(name = "total_sell_value", precision = 10, scale = 2)
     private BigDecimal totalSellValue;

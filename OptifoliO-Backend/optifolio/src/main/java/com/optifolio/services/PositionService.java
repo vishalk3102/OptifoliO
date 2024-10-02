@@ -17,11 +17,11 @@ public interface PositionService {
     List<PositionDTO> getAllPositionRecords();
 
     //    FUNCTION TO ADD NEW POSITION RECORD
-    PositionDTO addPositionRecord(PositionCreateDTO positionCreateDTO);
+    PositionDTO addPositionRecord(PositionCreateDTO positionCreateDTO) throws PositionRecordAlreadyExistException;
 
     //    FUNCTION TO UPDATE EXISTING  POSITION RECORD
     PositionDTO updatePositionRecord(PositionUpdateDTO positionUpdateDTO) throws PositionRecordAlreadyExistException;
 
     //    FUNCTION TO DELETE EXISTING  POSITION RECORD
-    PositionDTO deletePositionRecord(String optionId) throws CapitalRecordNotFoundException;
+    PositionDTO deletePositionRecord(String optionId) throws PositionRecordNotFoundException;
 }

@@ -18,7 +18,7 @@ public interface PositionMapper {
 
     //Mapping from  position entity to positionDto
     @Mapping(target = "totalBuyValue", ignore = true)
-    @Mapping(target = "cuurentValue", ignore = true)
+    @Mapping(target = "currentValue", ignore = true)
     @Mapping(target = "totalSellValue", ignore = true)
     @Mapping(target = "profitLoss", ignore = true)
     @Mapping(target = "netProfitLoss", ignore = true)
@@ -33,7 +33,7 @@ public interface PositionMapper {
     @Mapping(target = "optionId", ignore = true)
     @Mapping(target = "averageSellPrice", ignore = true)
     @Mapping(target = "totalBuyValue", ignore = true)
-    @Mapping(target = "cuurentValue", ignore = true)
+    @Mapping(target = "currentValue", ignore = true)
     @Mapping(target = "totalSellValue", ignore = true)
     @Mapping(target = "sellDate", ignore = true)
     @Mapping(target = "profitLoss", ignore = true)
@@ -45,7 +45,7 @@ public interface PositionMapper {
 
     //Update existing position  entity  from positionUpdateDTO
     @Mapping(target = "totalBuyValue", ignore = true)
-    @Mapping(target = "cuurentValue", ignore = true)
+    @Mapping(target = "currentValue", ignore = true)
     @Mapping(target = "totalSellValue", ignore = true)
     @Mapping(target = "profitLoss", ignore = true)
     @Mapping(target = "netProfitLoss", ignore = true)
@@ -55,7 +55,6 @@ public interface PositionMapper {
 
     //Mapping from List of position entities to list of positionDTO
     List<PositionDTO> toPositionDTOS(List<Position> records);
-
 
 
     @AfterMapping

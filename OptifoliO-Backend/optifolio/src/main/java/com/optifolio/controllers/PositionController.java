@@ -30,32 +30,32 @@ public class PositionController {
         List<PositionDTO> records=positionService.getAllPositionRecords();
         return ResponseEntity.status(HttpStatus.OK).body(records);
     }
-    @GetMapping("/get-position-record/{optionId}")
-    public ResponseEntity<PositionDTO> getPositionRecordById(@PathVariable String optionId) throws UserNotFoundException, CapitalRecordNotFoundException, PortfolioRecordNotFoundException, PositionRecordNotFoundException {
-        PositionDTO record=positionService.getPositionRecordById(optionId);
+    @GetMapping("/get-position-record/{tradingSymbol}")
+    public ResponseEntity<PositionDTO> getPositionRecordById(@PathVariable String tradingSymbol) throws  PositionRecordNotFoundException {
+        PositionDTO record=positionService.getPositionRecordById(tradingSymbol);
         return ResponseEntity.status(HttpStatus.OK).body(record);
     }
 
 
     //    ADD NEW CAPITAL RECORD
     @PostMapping("/add-position-record")
-    public ResponseEntity<PositionDTO> addPositionRecord(@RequestBody PositionCreateDTO positionCreateDTO)  {
+    public ResponseEntity<PositionDTO> addPositionRecord(@RequestBody PositionCreateDTO positionCreateDTO) throws PositionRecordAlreadyExistException {
         PositionDTO savedPositionRecord=positionService.addPositionRecord(positionCreateDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedPositionRecord);
     }
 
 
     //    UPDATE EXISTING  CAPITAL RECORD
-    @PutMapping("/update-position-record/{optionId}")
-    public ResponseEntity<PositionDTO> updatePositionRecord(@RequestBody PositionUpdateDTO positionUpdateDTO) throws CapitalRecordNotFoundException, PositionRecordAlreadyExistException {
+    @PutMapping("/update-position-record/{tradingSymbol}")
+    public ResponseEntity<PositionDTO> updatePositionRecord(@RequestBody PositionUpdateDTO positionUpdateDTO) throws  PositionRecordAlreadyExistException {
         PositionDTO savedPositionCapitalRecord=positionService.updatePositionRecord(positionUpdateDTO);
         return ResponseEntity.status(HttpStatus.OK).body(savedPositionCapitalRecord);
     }
 
     //    DELETE EXISTING  CAPITAL RECORD
-    @DeleteMapping("/delete-position-record/{optionId}")
-    public ResponseEntity<PositionDTO> deletePositionRecord(@PathVariable String optionId) throws CapitalRecordNotFoundException {
-        PositionDTO deletePositionrecord=positionService.deletePositionRecord(optionId);
-        return ResponseEntity.status(HttpStatus.OK).body(deletePositionrecord);
+    @DeleteMapping("/delete-position-record/{tradingSymbol}")
+    public ResponseEntity<PositionDTO> deletePositionRecord(@PathVariable String tradingSymbol) throws PositionRecordNotFoundException {
+        PositionDTO deletePositionRecord=positionService.deletePositionRecord(tradingSymbol);
+        return ResponseEntity.status(HttpStatus.OK).body(deletePositionRecord);
     }
 }
