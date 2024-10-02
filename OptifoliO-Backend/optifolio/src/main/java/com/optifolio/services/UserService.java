@@ -5,6 +5,7 @@ import com.optifolio.dto.UserDTO;
 import com.optifolio.dto.UserUpdateDTO;
 import com.optifolio.exceptions.UserAlreadyExistException;
 import com.optifolio.exceptions.UserNotFoundException;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
