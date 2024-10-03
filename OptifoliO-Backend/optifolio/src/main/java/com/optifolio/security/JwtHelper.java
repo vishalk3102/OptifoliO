@@ -18,12 +18,14 @@ import java.util.function.Function;
 @Component
 public class JwtHelper {
 
-    @Value("${jwt_token_validity}")
-    public static final long jwt_token_validity=5*60*60;
+    private final long jwtTokenValidity;
+    private final String jwtSecret;
 
-    @Value("${jwt_secret}")
-    private static final String jwt_secret="sgdcsudchshcsicuiseowgeiodsbcoloodoo9ude9hduefhlppcpsdpcsww";
-
+    public JwtHelper(@Value("${jwt.token.validity}") long jwtTokenValidity,
+                     @Value("${jwt.secret}") String jwtSecret) {
+        this.jwtTokenValidity = jwtTokenValidity;
+        this.jwtSecret = jwtSecret;
+    }
 
     //Retrieves the username from the JWT token by extracting the 'subject' claim.
     public String getUsernameFromToken(String token)
@@ -42,7 +44,7 @@ public class JwtHelper {
     //Generates a secret key for signing the JWT using the secret string.
     private SecretKey getSigningKey()
     {
-        byte[] keyBytes=jwt_secret.getBytes(StandardCharsets.UTF_8);
+        byte[] keyBytes=jwtSecret.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -80,7 +82,7 @@ public class JwtHelper {
     //Creates a JWT token with specified claims and subject (username).
     private String createToken(Map<String,Object> claims,String subject)
     {
-        return  Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis())).setExpiration(new Date(System.currentTimeMillis()+jwt_token_validity*1000)).signWith(getSigningKey()).compact();
+        return  Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis())).setExpiration(new Date(System.currentTimeMillis()+jwtTokenValidity*1000)).signWith(getSigningKey()).compact();
     }
 
 

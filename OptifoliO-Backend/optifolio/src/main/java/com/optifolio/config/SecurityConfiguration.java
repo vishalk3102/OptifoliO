@@ -7,6 +7,7 @@ import com.optifolio.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -26,13 +27,19 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableMethodSecurity
 public class SecurityConfiguration {
 
-    @Autowired
     private  JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
 
-    @Autowired
     private  JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    private  CorsConfig corsConfig;
+
+
+    public SecurityConfiguration(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, @Lazy JwtAuthenticationFilter jwtAuthenticationFilter, CorsConfig corsConfig) {
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.corsConfig = corsConfig;
+    }
 
     // Define a static array of Swagger's URLs that should be publicly accessible
     private static final String[] AuthUrl={
@@ -62,6 +69,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http
+                .cors(cors->cors.configurationSource(corsConfig.corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)  // Disable CSRF protection
                 .authorizeHttpRequests(auth->auth
                         .requestMatchers(HttpMethod.POST,"/api/auth/login").permitAll()

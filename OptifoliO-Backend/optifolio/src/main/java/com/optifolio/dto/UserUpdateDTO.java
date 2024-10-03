@@ -19,7 +19,7 @@ public class UserUpdateDTO {
     private String name;
 
     @Column(name="user_broker_id", unique = true,nullable = false)
-    private String Broker_id;
+    private String brokerId;
 
     @Column(name="email_id",unique = true, nullable = false)
     private String emailId;
@@ -29,10 +29,4 @@ public class UserUpdateDTO {
 
 //    @Column(name="profile_url", nullable = false)
 //    private String profile_url;
-
-    @Column(name="created_at", nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name="updated_at", nullable = false)
-    private LocalDateTime  updatedAt;
 }

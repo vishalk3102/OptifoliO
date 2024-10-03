@@ -3,35 +3,45 @@ package com.optifolio.services.Impl;
 import com.optifolio.dto.JwtRequest;
 import com.optifolio.dto.JwtResponse;
 import com.optifolio.exceptions.BadCredentialsException;
+import com.optifolio.models.Enum;
 import com.optifolio.models.User;
 import com.optifolio.repositories.UserRepository;
 import com.optifolio.security.JwtHelper;
 import com.optifolio.security.TokenBlacklist;
 import com.optifolio.services.AuthService;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 
 @Service
-@AllArgsConstructor
-public class AuthServiceImpl implements AuthService {
+public class AuthServiceImpl implements AuthService, UserDetailsService {
 
-    private final AuthenticationManager authenticationManager;
+    private  AuthenticationManager authenticationManager;
 
-    private  final JwtHelper jwtHelper;
+    private  JwtHelper jwtHelper;
 
-    private final TokenBlacklist tokenBlacklist;
+    private  TokenBlacklist tokenBlacklist;
 
-    private UserRepository usersRepository;
+    private UserRepository userRepository;
+
+    public AuthServiceImpl(@Lazy  AuthenticationManager authenticationManager, JwtHelper jwtHelper, TokenBlacklist tokenBlacklist, UserRepository userRepository) {
+        this.authenticationManager = authenticationManager;
+        this.jwtHelper = jwtHelper;
+        this.tokenBlacklist = tokenBlacklist;
+        this.userRepository = userRepository;
+    }
 
     public JwtResponse generateAndAuthenticateToken(JwtRequest jwtRequest) throws BadCredentialsException {
         UsernamePasswordAuthenticationToken authenticationToken=new UsernamePasswordAuthenticationToken(jwtRequest.getUsername(),jwtRequest.getPassword());
@@ -48,7 +58,7 @@ public class AuthServiceImpl implements AuthService {
 
         // Fetch user details from the database based on the username from authentication
         UserDetails userDetails= (UserDetails) authentication.getPrincipal();
-        User user= usersRepository.findByUserEmailId(userDetails.getUsername());
+        User user= userRepository.findByEmailId(userDetails.getUsername());
 
         if(user==null)
         {
@@ -74,4 +84,23 @@ public class AuthServiceImpl implements AuthService {
         }
         return false;
     }
+
+
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user =userRepository.findByEmailId(username);
+        if(user==null)
+        {
+            throw  new UsernameNotFoundException("Invalid username or password");
+        }
+        return new org.springframework.security.core.userdetails.User(user.getEmailId(), user.getPassword(), mapRolesToAuthorities(user.getRole()));
+    }
+
+
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Enum.RoleType role) {
+        // Wrapping single role to a list for proper authority mapping
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+    }
+
 }

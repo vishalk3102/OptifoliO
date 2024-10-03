@@ -11,6 +11,10 @@ public interface Enum {
     enum OptionType{
         CE,PE
     }
+    enum RoleType
+    {
+        ADMIN,USER
+    }
 
 
 }
