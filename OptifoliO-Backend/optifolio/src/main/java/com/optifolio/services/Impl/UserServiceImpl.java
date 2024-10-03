@@ -16,6 +16,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -33,6 +34,9 @@ public class UserServiceImpl implements UserService {
 
    @Autowired
    private  UserMapper userMapper;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     //    FUNCTION TO GET ALL USER
     @Override
@@ -62,7 +66,12 @@ public class UserServiceImpl implements UserService {
         }
         User user =userMapper.toUserEntity(userCreateDTO);
         userMapper.setTimestamps(user);
+
+        String encodePassword= passwordEncoder.encode(userCreateDTO.getPassword());
+        user.setPassword(encodePassword);
+
         User savedUser=userRepository.save(user);
+
         return userMapper.toUserDTO(savedUser);
     }
 

@@ -22,7 +22,7 @@ public class UserDTO {
     private String name;
 
     @Column(name="user_broker_id", unique = true,nullable = false)
-    private String Broker_id;
+    private String brokerId;
 
     @Column(name="email_id",unique = true, nullable = false)
     private String emailId;
