@@ -6,9 +6,11 @@ import com.optifolio.repositories.UserRepository;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.function.Function;
@@ -29,7 +31,12 @@ public class OptifolioApplication implements CommandLineRunner {
 	}
 
 
+	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+
 	@Override
 	public void run(String... args) throws Exception {
 
@@ -46,9 +53,11 @@ public class OptifolioApplication implements CommandLineRunner {
 			User user = new User();
 			user.setEmailId(emailId);
 			user.setName(name);
-			user.setPassword(password);
 			user.setBrokerId(brokerId);
 			user.setRole(role);
+
+			String encodePassword= passwordEncoder.encode(password);
+			user.setPassword(encodePassword);
 
 			LocalDateTime now = LocalDateTime.now();
 			user.setCreatedAt(now);
