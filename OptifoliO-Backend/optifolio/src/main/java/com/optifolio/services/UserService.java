@@ -6,10 +6,11 @@ import com.optifolio.dto.UserUpdateDTO;
 import com.optifolio.exceptions.UserAlreadyExistException;
 import com.optifolio.exceptions.UserNotFoundException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface UserService {
+public interface UserService{
     List<UserDTO> getAllusers();
     UserDTO getUserById(String userId) throws UserNotFoundException;
 

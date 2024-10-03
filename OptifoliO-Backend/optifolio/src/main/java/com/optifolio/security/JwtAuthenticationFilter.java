@@ -9,6 +9,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -29,7 +34,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private  UserRepository usersRepository;
 
-
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     //FUNCTION TO FILTER EACH INCOMING HTTP REQUEST TO VALIDATE JWT TOKEN
     @Override
@@ -61,7 +67,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.info("Invalid Header Value");
         }
 
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+            Boolean validateToken = this.jwtHelper.validateToken(token, userDetails);
+            if (validateToken) {
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else {
+                logger.info("Validation Fails");
+            }
 
+        }
         filterChain.doFilter(request, response);
     }
 }

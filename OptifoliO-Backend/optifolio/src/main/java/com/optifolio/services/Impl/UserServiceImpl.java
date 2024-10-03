@@ -6,15 +6,22 @@ import com.optifolio.dto.UserUpdateDTO;
 import com.optifolio.exceptions.UserAlreadyExistException;
 import com.optifolio.exceptions.UserNotFoundException;
 import com.optifolio.mapper.UserMapper;
+import com.optifolio.models.Enum;
 import com.optifolio.models.User;
 import com.optifolio.repositories.UserRepository;
 import com.optifolio.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -48,14 +55,15 @@ public class UserServiceImpl implements UserService {
 //    FUNCTION TO ADD USER
     @Override
     public UserDTO addUser(UserCreateDTO userCreateDTO) throws UserAlreadyExistException {
-        Optional<User> existingUser=userRepository.findByEmailId(userCreateDTO.getEmailId());
-        if(existingUser.isPresent())
+        User existingUser=userRepository.findByEmailId(userCreateDTO.getEmailId());
+        if(existingUser!=null)
         {
             throw new UserAlreadyExistException();
         }
-       User user =userMapper.toUserEntity(userCreateDTO);
-       User savedUser=userRepository.save(user);
-       return userMapper.toUserDTO(savedUser);
+        User user =userMapper.toUserEntity(userCreateDTO);
+        userMapper.setTimestamps(user);
+        User savedUser=userRepository.save(user);
+        return userMapper.toUserDTO(savedUser);
     }
 
 //    FUNCTION TO UPDATE EXISTING USER
@@ -63,6 +71,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO updateUser(UserUpdateDTO userUpdateDTO) throws UserNotFoundException {
         User existingUser=userRepository.findById(userUpdateDTO.getUserId()).orElseThrow(UserNotFoundException::new);
         userMapper.updateUserEntityFromDTO(userUpdateDTO,existingUser);
+        userMapper.setTimestamps(existingUser);
         User updatedUser=userRepository.save(existingUser);
         return  userMapper.toUserDTO(updatedUser);
     }
@@ -74,4 +83,5 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(user);
         return userMapper.toUserDTO(user);
     }
+
 }

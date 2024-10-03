@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import javax.management.relation.Role;
 import java.time.LocalDateTime;
 
 @Getter
@@ -25,13 +26,17 @@ public class User {
     private String name;
 
     @Column(name="user_broker_id", unique = true,nullable = false)
-    private String Broker_id;
+    private String brokerId;
 
     @Column(name="email_id",unique = true, nullable = false)
     private String emailId;
 
     @Column(name="password", nullable = false)
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="role")
+    private Enum.RoleType role;
 
 //    @Column(name="profile_url", nullable = false)
 //    private String profile_url;
