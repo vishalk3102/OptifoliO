@@ -10,6 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -39,8 +40,13 @@ public class CapitalTrack {
     @Column(name = "amount_change", precision = 12, scale = 2, nullable = false)
     private BigDecimal amountChange;
 
-    @Column(name = "comments", columnDefinition = "TEXT")
-    private String comments;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "comment_id", referencedColumnName = "comment_id")
+    private Comment comment;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

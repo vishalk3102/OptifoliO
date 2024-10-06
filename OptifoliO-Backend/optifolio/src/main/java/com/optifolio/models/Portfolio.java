@@ -10,6 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -71,16 +72,21 @@ public class Portfolio {
     @Column(name = "net_pnl", precision = 12, scale = 2)
     private BigDecimal netProfitLoss;
 
-    @Column(name = "comments", columnDefinition = "TEXT")
-    private String comments;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "comment_id", referencedColumnName = "comment_id")
+    private Comment comment;
 
     @Column(name = "status")
     private Boolean status=true;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
 }

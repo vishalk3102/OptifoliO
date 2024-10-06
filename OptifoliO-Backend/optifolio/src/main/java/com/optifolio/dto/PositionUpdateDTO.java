@@ -18,6 +18,9 @@ public class PositionUpdateDTO {
     @Column(name="trading_symbol",nullable=false)
     private String tradingSymbol;
 
+    @Column(name = "strike_price", nullable = false)
+    private Double strikePrice;
+
     @Column(name = "exchange", nullable = false)
     private String exchange;
 
@@ -39,7 +42,6 @@ public class PositionUpdateDTO {
 
     @Column(name = "sell_date")
     private LocalDateTime sellDate;
-
 
     @Column(name = "tax_charges", precision = 12, scale = 2)
     private BigDecimal taxCharges;

@@ -10,6 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,6 +30,9 @@ public class Position {
 
     @Column(name = "exchange", nullable = false)
     private String exchange;
+
+    @Column(name = "strike_price", nullable = false)
+    private Double strikePrice;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "option_type", nullable = false)
@@ -67,15 +71,21 @@ public class Position {
     @Column(name = "net_pnl", precision = 12, scale = 2)
     private BigDecimal netProfitLoss;
 
-    @Column(name = "comments", columnDefinition = "TEXT")
-    private String comments;
-
     @Column(name = "status")
     private Boolean status=true;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "comment_id", referencedColumnName = "comment_id")
+    private Comment comment;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
 }
